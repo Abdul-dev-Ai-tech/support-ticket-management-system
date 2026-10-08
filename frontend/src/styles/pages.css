@@ -1,0 +1,54 @@
+.page-section {
+  width: 100%;
+}
+
+.page-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-lg);
+}
+
+.title-wrap h1,
+.page-header h1,
+.auth-header h1 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.message-box {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.message-box.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.message-box h2 {
+  margin-bottom: 8px;
+}
+
+.text-link {
+  font-size: 0.9rem;
+}
+
+#ticket-search,
+#status-filter,
+#priority-filter,
+#category-filter,
+#title,
+#description,
+#category,
+#priority,
+#email,
+#password,
+#name,
+#register-email,
+#register-password {
+  border-radius: 12px;
+}
+
+button[type='submit'] {
+  min-width: 160px;
+}
