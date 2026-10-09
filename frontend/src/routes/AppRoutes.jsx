@@ -1,32 +1,46 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import ProtectedRoute from '../components/ProtectedRoute'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
-import Dashboard from '../pages/Dashboard'
-import Profile from '../pages/Profile'
-import Tickets from '../pages/Tickets'
-import CreateTicket from '../pages/CreateTicket'
-import TicketDetails from '../pages/TicketDetails'
-import EditTicket from '../pages/EditTicket'
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
-const AppRoutes = ({ user, setUser, showToast }) => {
+import Dashboard from "../pages/Dashboard";
+import Tickets from "../pages/Tickets";
+import CreateTicket from "../pages/CreateTicket";
+import TicketDetails from "../pages/TicketDetails";
+import EditTicket from "../pages/EditTicket";
+import TicketBoard from "../pages/TicketBoard";
+import Profile from "../pages/Profile";
+
+import ProtectedRoute from "./ProtectedRoute";
+import DashboardLayout from "../components/DashboardLayout";
+
+function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login setUser={setUser} showToast={showToast} />} />
-      <Route path="/register" element={<Register showToast={showToast} />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <Route element={<ProtectedRoute user={user} />}>
-        <Route path="/dashboard" element={<Dashboard user={user} />} />
-        <Route path="/profile" element={<Profile user={user} />} />
-        <Route path="/tickets" element={<Tickets showToast={showToast} />} />
-        <Route path="/tickets/create" element={<CreateTicket showToast={showToast} />} />
-        <Route path="/tickets/:id" element={<TicketDetails showToast={showToast} />} />
-        <Route path="/tickets/:id/edit" element={<EditTicket showToast={showToast} />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        element={
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/tickets" element={<Tickets />} />
+        <Route path="/tickets/create" element={<CreateTicket />} />
+        <Route path="/tickets/board" element={<TicketBoard />} />
+        <Route path="/tickets/:id" element={<TicketDetails />} />
+        <Route path="/tickets/:id/edit" element={<EditTicket />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
+
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
-  )
+  );
 }
 
-export default AppRoutes
+export default AppRoutes;

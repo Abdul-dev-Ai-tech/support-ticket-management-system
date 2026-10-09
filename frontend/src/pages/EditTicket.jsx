@@ -108,66 +108,73 @@ const EditTicket = ({ showToast }) => {
   }
 
   return (
-    <div className="page-card form-card">
-      <div className="page-header compact">
+    <div className="page-shell">
+      <div className="page-header">
         <div>
-          <p className="eyebrow">Update ticket</p>
-          <h1>Edit: {ticket.title}</h1>
+          <span className="page-eyebrow">Edit Ticket</span>
+          <h1 className="page-title">Update ticket</h1>
+          <p className="page-description">Adjust the details for this support request.</p>
         </div>
-        <Link to={`/tickets/${ticket.id}`} className="secondary-button">
-          Back to ticket
-        </Link>
+
+        <div className="action-row">
+          <Link to={`/tickets/${ticket.id}`} className="page-button page-button-secondary">
+            Back to ticket
+          </Link>
+        </div>
       </div>
 
-      <AlertBanner type="error" message={submitError} />
+      <section className="page-panel">
+        <AlertBanner type="error" message={submitError} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="ticket-form">
-        <div className="form-group">
-          <label htmlFor="title">Title</label>
-          <input id="title" type="text" {...register('title')} />
-          {errors.title && <p className="field-error">{errors.title.message}</p>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea id="description" rows="6" {...register('description')} />
-          {errors.description && <p className="field-error">{errors.description.message}</p>}
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="category">Category</label>
-            <select id="category" {...register('category')}>
-              <option value="">Select category</option>
-              <option value="technical">Technical</option>
-              <option value="billing">Billing</option>
-              <option value="account">Account</option>
-              <option value="general">General</option>
-            </select>
-            {errors.category && <p className="field-error">{errors.category.message}</p>}
+        <form className="premium-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="premium-field">
+            <label htmlFor="title">Title</label>
+            <input id="title" className="premium-input" type="text" {...register('title')} />
+            {errors.title && <span className="field-error">{errors.title.message}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="priority">Priority</label>
-            <select id="priority" {...register('priority')}>
-              <option value="">Select priority</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-            {errors.priority && <p className="field-error">{errors.priority.message}</p>}
+          <div className="premium-field">
+            <label htmlFor="description">Description</label>
+            <textarea id="description" className="premium-textarea" rows="6" {...register('description')} />
+            {errors.description && <span className="field-error">{errors.description.message}</span>}
           </div>
-        </div>
 
-        <div className="form-actions">
-          <Link to={`/tickets/${ticket.id}`} className="secondary-button secondary-button-light">
-            Cancel
-          </Link>
-          <button type="submit" className="primary-button submit-button" disabled={isSubmitting || mutation.isPending}>
-            {isSubmitting || mutation.isPending ? 'Updating...' : 'Update Ticket'}
-          </button>
-        </div>
-      </form>
+          <div className="form-row">
+            <div className="premium-field">
+              <label htmlFor="category">Category</label>
+              <select id="category" className="premium-select" {...register('category')}>
+                <option value="">Select category</option>
+                <option value="technical">Technical</option>
+                <option value="billing">Billing</option>
+                <option value="account">Account</option>
+                <option value="general">General</option>
+              </select>
+              {errors.category && <span className="field-error">{errors.category.message}</span>}
+            </div>
+
+            <div className="premium-field">
+              <label htmlFor="priority">Priority</label>
+              <select id="priority" className="premium-select" {...register('priority')}>
+                <option value="">Select priority</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+              {errors.priority && <span className="field-error">{errors.priority.message}</span>}
+            </div>
+          </div>
+
+          <div className="action-row">
+            <Link to={`/tickets/${ticket.id}`} className="page-button page-button-secondary">
+              Cancel
+            </Link>
+
+            <button type="submit" className="page-button page-button-primary" disabled={isSubmitting || mutation.isPending}>
+              {isSubmitting || mutation.isPending ? 'Updating...' : 'Update Ticket'}
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
   )
 }

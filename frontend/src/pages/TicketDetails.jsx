@@ -4,8 +4,17 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { deleteTicket, getTicketById } from '../api/ticketApi'
 import AlertBanner from '../components/AlertBanner'
-import ConfirmModal from '../components/ConfirmModal'
 import Loading from '../components/Loading'
+
+const formatDate = (dateString) => {
+  if (!dateString) return '—'
+
+  return new Date(dateString).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
 
 const TicketDetails = ({ showToast }) => {
   const { id } = useParams()
@@ -13,7 +22,7 @@ const TicketDetails = ({ showToast }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const successMessage = location.state?.successMessage
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const {
     data: ticket,
@@ -57,57 +66,105 @@ const TicketDetails = ({ showToast }) => {
   }
 
   return (
-    <div className="page-card detail-card">
-      <div className="page-header compact">
+    <div className="page-shell">
+      <div className="page-header">
         <div>
-          <p className="eyebrow">Ticket #{ticket.id}</p>
-          <h1>{ticket.title}</h1>
+          <span className="page-eyebrow">Ticket #{ticket.id}</span>
+          <h1 className="page-title">{ticket.title}</h1>
+          <p className="page-description">Review all information related to this support ticket.</p>
         </div>
 
-        <div className="detail-actions">
-          <Link to={`/tickets/${ticket.id}/edit`} className="secondary-button">
-            Edit ticket
+        <div className="action-row">
+          <Link to="/tickets" className="page-button page-button-secondary">
+            ← Back
           </Link>
-          <button type="button" className="danger-button danger-outline" onClick={() => setDeleteDialogOpen(true)}>
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete ticket'}
+
+          <Link to={`/tickets/${ticket.id}/edit`} className="page-button page-button-primary">
+            Edit Ticket
+          </Link>
+
+          <button
+            type="button"
+            className="page-button page-button-danger"
+            onClick={() => setDeleteModalOpen(true)}
+          >
+            Delete
           </button>
         </div>
       </div>
 
       <AlertBanner type="success" message={successMessage} />
 
-      <div className="detail-grid">
-        <div className="detail-pill">
-          <p className="label">Category</p>
-          <p>{ticket.category}</p>
-        </div>
-        <div className="detail-pill">
-          <p className="label">Priority</p>
-          <p>{ticket.priority}</p>
-        </div>
-        <div className="detail-pill">
-          <p className="label">Status</p>
-          <p>{ticket.status}</p>
-        </div>
-      </div>
+      <section className="page-panel">
+        <div className="detail-grid">
+          <div className="detail-item">
+            <span>Category</span>
+            <strong>{ticket.category}</strong>
+          </div>
 
-      <div className="description-box">
-        <p className="label">Description</p>
-        <p>{ticket.description}</p>
-      </div>
+          <div className="detail-item">
+            <span>Priority</span>
+            <strong>
+              <span className={`badge badge-priority badge-${ticket.priority}`}>{ticket.priority}</span>
+            </strong>
+          </div>
 
-      <ConfirmModal
-        isOpen={deleteDialogOpen}
-        title="Delete ticket"
-        message="This action cannot be undone. Are you sure you want to remove this ticket?"
-        confirmLabel="Delete ticket"
-        onCancel={() => setDeleteDialogOpen(false)}
-        onConfirm={() => {
-          setDeleteDialogOpen(false)
-          handleDelete()
-        }}
-        loading={deleteMutation.isPending}
-      />
+          <div className="detail-item">
+            <span>Status</span>
+            <strong>
+              <span className={`badge badge-status badge-${ticket.status}`}>{ticket.status.replace('_', ' ')}</span>
+            </strong>
+          </div>
+
+          <div className="detail-item">
+            <span>Created</span>
+            <strong>{formatDate(ticket.created_at)}</strong>
+          </div>
+
+          <div className="detail-item">
+            <span>Updated</span>
+            <strong>{formatDate(ticket.updated_at)}</strong>
+          </div>
+
+          <div className="detail-item">
+            <span>Ticket ID</span>
+            <strong>#TKT-{ticket.id}</strong>
+          </div>
+        </div>
+
+        <div className="ticket-description-box">
+          <span className="page-eyebrow">Description</span>
+          {ticket.description}
+        </div>
+      </section>
+
+      {deleteModalOpen && (
+        <div className="modal-overlay">
+          <div className="delete-modal">
+            <div className="delete-modal-icon">!</div>
+            <h3>Delete ticket?</h3>
+            <p>This action cannot be undone. Are you sure you want to remove this ticket?</p>
+
+            <div className="delete-modal-actions">
+              <button type="button" className="page-button page-button-secondary" onClick={() => setDeleteModalOpen(false)}>
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="page-button page-button-danger"
+                onClick={() => {
+                  setDeleteModalOpen(false)
+                  handleDelete()
+                }}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete Ticket'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

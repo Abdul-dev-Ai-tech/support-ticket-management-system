@@ -112,27 +112,26 @@ const Tickets = ({ showToast }) => {
   }
 
   return (
-    <div className="page-section">
+    <div className="page-shell">
       <div className="page-header">
-        <div className="title-wrap">
-          <div>
-            <p className="eyebrow">Support center</p>
-            <h1>Tickets</h1>
-          </div>
-          <div className="header-visual" aria-hidden="true">
-            <span>🎫</span>
-          </div>
+        <div>
+          <span className="page-eyebrow">Support center</span>
+          <h1 className="page-title">Tickets</h1>
+          <p className="page-description">Monitor and manage all support requests in one place.</p>
         </div>
-        <Link to="/tickets/create" className="primary-button">
-          + Create ticket
-        </Link>
+
+        <div className="action-row">
+          <Link to="/tickets/create" className="page-button page-button-primary">
+            + Create ticket
+          </Link>
+        </div>
       </div>
 
       <AlertBanner type="success" message={successMessage} />
 
-      <div className="filter-panel">
+      <section className="filter-panel">
         <div className="filter-grid">
-          <div className="filter-group filter-search">
+          <div className="filter-group">
             <label htmlFor="ticket-search">Search</label>
             <input
               id="ticket-search"
@@ -177,11 +176,11 @@ const Tickets = ({ showToast }) => {
         </div>
 
         <div className="filter-actions">
-          <button type="button" className="secondary-button" onClick={clearFilters}>
+          <button type="button" className="page-button page-button-secondary" onClick={clearFilters}>
             Clear filters
           </button>
         </div>
-      </div>
+      </section>
 
       <div className="stats-grid">
         <div className="stat-card">
@@ -206,20 +205,18 @@ const Tickets = ({ showToast }) => {
         <div className="pagination-controls">
           <button
             type="button"
-            className="secondary-button"
+            className="page-button page-button-secondary"
             disabled={currentPage === 1 || isLoading}
             onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
           </button>
 
-          <span className="pagination-status">
-            Page {currentPage} / {Math.max(totalPages, 1)}
-          </span>
+          <span className="pagination-status">Page {currentPage} / {Math.max(totalPages, 1)}</span>
 
           <button
             type="button"
-            className="secondary-button"
+            className="page-button page-button-secondary"
             disabled={currentPage >= totalPages || totalPages === 0 || isLoading}
             onClick={() => handlePageChange(currentPage + 1)}
           >
@@ -248,11 +245,11 @@ const Tickets = ({ showToast }) => {
       </div>
 
       {!tickets.length ? (
-        <div className="empty-state-panel ticket-empty">
+        <div className="empty-state-panel">
           <div className="empty-state-icon">•</div>
           <h2>No tickets found</h2>
           <p>Try changing your filters or create a new support ticket.</p>
-          <Link to="/tickets/create" className="primary-button">
+          <Link to="/tickets/create" className="page-button page-button-primary">
             Create ticket
           </Link>
         </div>
@@ -295,7 +292,7 @@ const Tickets = ({ showToast }) => {
                       <Link to={`/tickets/${ticket.id}/edit`} className="mini-link muted-link">
                         Edit
                       </Link>
-                      <button type="button" className="mini-button danger" onClick={() => setDeleteTarget(ticket.id)}>
+                      <button type="button" className="mini-button" onClick={() => setDeleteTarget(ticket.id)}>
                         Delete
                       </button>
                     </div>

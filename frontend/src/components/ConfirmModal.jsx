@@ -10,10 +10,10 @@ const ConfirmModal = ({ isOpen, title, message, confirmLabel = 'Delete', onCance
         <p>{message}</p>
 
         <div className="modal-actions">
-          <button type="button" className="secondary-button" onClick={onCancel} disabled={loading}>
+          <button type="button" className="page-button page-button-secondary" onClick={onCancel} disabled={loading}>
             Cancel
           </button>
-          <button type="button" className="danger-button" onClick={onConfirm} disabled={loading}>
+          <button type="button" className="page-button page-button-danger" onClick={onConfirm} disabled={loading}>
             {loading ? 'Deleting...' : confirmLabel}
           </button>
         </div>
